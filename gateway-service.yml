@@ -1,3 +1,4 @@
+
 spring:
   cloud:
     config:
@@ -6,8 +7,10 @@ spring:
       discovery:
         locator:
           enabled: true
+
       default-filters:
         - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin
+
       globalcors:
         add-to-simple-url-handler-mapping: true
         corsConfigurations:
@@ -19,40 +22,43 @@ spring:
               - OPTIONS
             allowed-headers: "*"
             allow-credentials: true
+
       routes:
-        # games-service routes
-        - id: games-service
-          uri: lb://games-service:8081/games
-          predicates:
-            - Path=/games/v1/catalogue/list/**"
-        - id: games-service
-          uri: lb://games-service:8081/games
+        # Games Service
+        - id: games-catalogue
+          uri: lb://games-service
           predicates:
             - Path=/games/v1/catalogue/**
-        # cart-service routes
-        - id: cart-service
-          uri: lb://cart-service:8083/cart
+
+        # Cart Service
+        - id: cart-update
+          uri: lb://cart-service
           predicates:
             - Path=/cart/v1/update
-        - id: cart-service
-          uri: lb://cart-service:8083/cart
+
+        - id: cart-content
+          uri: lb://cart-service
           predicates:
             - Path=/cart/v1/content
-        - id: cart-service
-          uri: lb://cart-service:8083/cart
+
+        - id: cart-purchase
+          uri: lb://cart-service
           predicates:
             - Path=/cart/v1/purchase/**
-        # login-service routes
-        - id: login-service
-          uri: lb://login-service:8082/login
+
+        # Login Service
+        - id: login-authorization
+          uri: lb://login-service
           predicates:
             - Path=/login/v1/authorization
-        - id: login-service
-          uri: lb://login-service:8082/login
+
+        - id: login-registration
+          uri: lb://login-service
           predicates:
             - Path=/login/v1/registration
-        # orders-service routes
-        - id: orders-service
-          uri: lb://orders-service:8084/orders
+
+        # Orders Service
+        - id: orders-purchases
+          uri: lb://orders-service
           predicates:
             - Path=/orders/v1/purchases/**
